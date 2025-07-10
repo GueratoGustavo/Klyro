@@ -1,0 +1,26 @@
+name: Infra CI/CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build API
+        run: docker build -t klyro-api ./apps/api
+
+      - name: Build Classifier
+        run: docker build -t klyro-classifier ./apps/classifier
+
+      - name: Test API (basic)
+        run: |
+          echo "Testes da API aqui (mock)..."

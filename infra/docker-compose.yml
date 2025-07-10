@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  api:
+    build: ../apps/api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../apps/api:/usr/src/app
+    depends_on:
+      - classifier
+    networks:
+      - klyro-net
+
+  classifier:
+    build: ../apps/classifier
+    ports:
+      - "5000:5000"
+    volumes:
+      - ../apps/classifier:/app
+    networks:
+      - klyro-net
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - klyro-net
+
+networks:
+  klyro-net:
+    driver: bridge
